@@ -1,10 +1,3 @@
-//
-//  SecretsView.swift
-//  DiceKeys
-//
-//  Created by Angelos Veglektsis on 7/6/22.
-//
-
 import SwiftUI
 
 class SecretsViewModel: ObservableObject, Identifiable {
@@ -18,6 +11,7 @@ struct SecretsView: View {
     let navigateTo: (DiceKeyPresentPageContent) -> Void
     
     @StateObject var model = SecretsViewModel()
+    @State var showPasswordCreationMenu: Bool = false
 
     var body: some View {
         
@@ -98,6 +92,19 @@ struct SecretsView: View {
                 }
                 
             }
+        }
+        .onAppear {
+            if !UserDefaults.standard.bool(forKey: "hasLoadedSecretsViewBefore") {
+                showPasswordCreationMenu = true
+                UserDefaults.standard.set(true, forKey: "hasLoadedSecretsViewBefore")
+            }
+        }
+        .sheet(isPresented: $showPasswordCreationMenu) {
+            // Present your password creation menu here
+            Text("Password Creation Menu")
+        }
+        .onDisappear {
+            showPasswordCreationMenu = false
         }
     }
 }
